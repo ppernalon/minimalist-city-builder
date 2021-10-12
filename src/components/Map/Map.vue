@@ -44,6 +44,30 @@ const drawRectOnCanvas = (col, row, color, context) => {
   )
 }
 
+const getSizeBuilding = (buildingType) => {
+  return mapConstants.SIZE_BUILDING[buildingType]
+}
+
+const getBuildingImageSource = (buildingType) => {
+  return mapConstants.SRC_BUILDINGS[buildingType]
+}
+const drawBuildingOnCanvas = (col, row, buildingType, context) => {
+  const imageSrc = getBuildingImageSource(buildingType)
+  const buildingSize = getSizeBuilding(buildingType)
+  const imageWidth = buildingSize[1] * mapConstants.TILE_SIZE
+  const imageHeight = buildingSize[0] * mapConstants.TILE_SIZE
+  const imageToDraw = new Image(imageWidth, imageHeight)
+  imageToDraw.src = imageSrc
+
+  context.drawImage(
+      imageToDraw,
+      col * mapConstants.TILE_SIZE,
+      row * mapConstants.TILE_SIZE,
+      imageWidth,
+      imageHeight
+  )
+}
+
 const computeInfluenceSphere = (col, row, buildingType) => {
   const range = mapConstants.INFLUENCE_RANGES[buildingType]
   const squaresToFill = []
@@ -130,16 +154,31 @@ export default {
         col = mapConstants.NUMBER_TILE_COL - 1
       }
 
-      /* draw on canvas */
-      const canvas = this.$refs["hoverCanvas"]
-      const context2D = canvas.getContext("2d")
+      /* pick canvas to draw on */
+      const hoverCanvas = this.$refs["hoverCanvas"]
+      const hoverContext = hoverCanvas.getContext("2d")
 
       /* reset canvas then draw */
-      context2D.clearRect(0, 0, this.mapWidth, this.mapHeight)
-      const squaresToFill = computeInfluenceSphere(col, row, "TownCenter")
+      hoverContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
+
+      /* draw influence */
+      const buildingType = "TownCenter" // TODO change with props after
+      const buildingSize = getSizeBuilding(buildingType)
+
+      let squaresToFill
+      if (buildingSize[0] > 1 && buildingSize[1] > 1){
+        const centerBuildingRow = row + (buildingSize[0]-1)/2
+        const centerBuildingCol = col + (buildingSize[1]-1)/2
+        squaresToFill = computeInfluenceSphere(centerBuildingCol, centerBuildingRow, buildingType)
+      } else {
+        squaresToFill = computeInfluenceSphere(col, row, buildingType)
+      }
       squaresToFill.forEach((square) => {
-        drawRectOnCanvas(square[0], square[1], mapConstants.INFLUENCE_COLOR, context2D)
+        drawRectOnCanvas(square[0], square[1], mapConstants.INFLUENCE_COLOR, hoverContext)
       })
+
+      /* draw building */
+      drawBuildingOnCanvas(col, row, buildingType, hoverContext)
     }
   }
 }

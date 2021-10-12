@@ -49,18 +49,48 @@ const mapConstants = {
 
     INFLUENCE_RANGES: {
         TownCenter: 7,
-        Manor: 2,
-        House: 3,
-        Market: 5,
-        Theater: 3,
-        Park: 2,
-        Lumberjacks: 5,
-        Mines: 5,
-        Harbour: 3,
-        Tavern: 3,
+        Manor: 3,
+        House: 4,
+        Market: 6,
+        Theater: 4,
+        Park: 3,
+        Lumberjacks: 6,
+        Mines: 6,
+        Harbour: 4,
+        Tavern: 4,
         Farm: 4,
         Fields: 4
-    }
+    },
+
+    SIZE_BUILDING: {
+        TownCenter: [1, 1],
+        Manor: [2, 2],
+        House: [2, 3],
+        Market: [4, 5],
+        Theater: [4, 4],
+        Park: [1, 1],
+        Lumberjacks: [4, 4],
+        Mines: [4, 4],
+        Harbour: [3, 2],
+        Tavern: [2, 2],
+        Farm: [2, 2],
+        Fields: [4, 2]
+    },
+
+    SRC_BUILDINGS: {
+        TownCenter: '/buildings/town-center.png',
+        Manor: '/buildings/manor.png',
+        House: '/buildings/houses.png',
+        Market: '/buildings/market.png',
+        Theater: '/buildings/theater.png',
+        Park: '/buildings/park.png',
+        Lumberjacks: '/buildings/lumberjack.png',
+        Mines: '/buildings/mines.png',
+        Harbour: '/buildings/harbour.png',
+        Tavern: '/buildings/tavern.png',
+        Farm: '/buildings/farm.png',
+        Fields: '/buildings/fields.png',
+    },
 }
 
 export default mapConstants
