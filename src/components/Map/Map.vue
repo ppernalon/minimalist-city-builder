@@ -10,18 +10,6 @@
 import mapConstants from "/src/components/Map/MapConstants"
 import MapHttpServices from "../../http/MapHttpServices"
 
-const randomMap = []
-for (let row = 0; row < 32; row++){
-  const rowList = []
-  for (let col = 0; col < 56; col++){
-    const minIndexColor = Math.ceil(0)
-    const maxIndexColor = Math.floor(4)
-    const indexColor = Math.floor(Math.random() * (maxIndexColor - minIndexColor +1)) + minIndexColor
-    rowList[col] = indexColor
-  }
-  randomMap.push(rowList)
-}
-
 const pickColorPool = (value) => {
   let envColors
   switch (value){
@@ -54,6 +42,23 @@ const drawRectOnCanvas = (col, row, color, context) => {
       mapConstants.TILE_SIZE,
       mapConstants.TILE_SIZE
   )
+}
+
+const computeInfluenceSphere = (col, row, buildingType) => {
+  const range = mapConstants.INFLUENCE_RANGES[buildingType]
+  const squaresToFill = []
+  for (let rowRange = 0; rowRange < range; rowRange++){
+    for (let colRange = 0; colRange < range; colRange++){
+      const dist = Math.sqrt(Math.pow(colRange, 2) + Math.pow(rowRange, 2))
+      if (dist < range){
+        squaresToFill.push([col + colRange, row + rowRange])
+        squaresToFill.push([col - colRange, row - rowRange])
+        squaresToFill.push([col + colRange, row - rowRange])
+        squaresToFill.push([col - colRange, row + rowRange])
+      }
+    }
+  }
+  return squaresToFill
 }
 
 export default {
@@ -90,19 +95,12 @@ export default {
           /* random index [int] for random variant of the color */
           const minIndexColor = Math.ceil(1)
           const maxIndexColor = Math.floor(3)
-          const indexColor = Math.floor(Math.random() * (maxIndexColor - minIndexColor +1)) + minIndexColor
+          const indexColor = Math.floor(Math.random() * (maxIndexColor - minIndexColor + 1)) + minIndexColor
 
           /* pick env colors */
           const envColors = pickColorPool(col)
 
-          /* draw on canvas */
-          context2D.fillStyle = envColors[indexColor]
-          context2D.fillRect(
-              colIndex * mapConstants.TILE_SIZE,
-              rowIndex * mapConstants.TILE_SIZE,
-              mapConstants.TILE_SIZE,
-              mapConstants.TILE_SIZE
-          )
+          drawRectOnCanvas(colIndex, rowIndex, envColors[indexColor], context2D)
         })
       })
     },
@@ -136,17 +134,12 @@ export default {
       const canvas = this.$refs["hoverCanvas"]
       const context2D = canvas.getContext("2d")
 
-      /* reset canvas before draw */
+      /* reset canvas then draw */
       context2D.clearRect(0, 0, this.mapWidth, this.mapHeight)
-      drawRectOnCanvas(col, row, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col + 1, row + 1, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col - 1, row - 1, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col + 1, row - 1, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col - 1, row + 1, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col + 1, row, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col - 1, row, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col, row + 1, mapConstants.INFLUENCE_COLOR, context2D)
-      drawRectOnCanvas(col, row - 1, mapConstants.INFLUENCE_COLOR, context2D)
+      const squaresToFill = computeInfluenceSphere(col, row, "TownCenter")
+      squaresToFill.forEach((square) => {
+        drawRectOnCanvas(square[0], square[1], mapConstants.INFLUENCE_COLOR, context2D)
+      })
     }
   }
 }
@@ -177,6 +170,7 @@ export default {
 
 #hoverCanvas{
   z-index: 1;
+  opacity: 0.8;
 }
 
 #buildingsCanvas{

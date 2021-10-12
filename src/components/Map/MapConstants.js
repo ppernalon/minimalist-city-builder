@@ -45,7 +45,22 @@ const mapConstants = {
         "#D8D194"
     ],
 
-    INFLUENCE_COLOR: "#FFCE00"
+    INFLUENCE_COLOR: "#FFCE00",
+
+    INFLUENCE_RANGES: {
+        TownCenter: 7,
+        Manor: 2,
+        House: 3,
+        Market: 5,
+        Theater: 3,
+        Park: 2,
+        Lumberjacks: 5,
+        Mines: 5,
+        Harbour: 3,
+        Tavern: 3,
+        Farm: 4,
+        Fields: 4
+    }
 }
 
 export default mapConstants
