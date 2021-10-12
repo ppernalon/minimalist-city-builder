@@ -21,15 +21,40 @@
           <td class="contentTable">Xx_RoroDu13_xX</td>
           <td class="contentTable">13950</td>
         </tr>
+        {{ log(this.rankingData) }}
+        <tr v-for="(user,index) in users" :key="index">
+          {{ log("gf") }}
+          <td class="contentTable">{{user[0]}}</td>
+          <td class="contentTable">{{user[1]}}</td>
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
+import Ranking from "../../http/RankingHttpServices";
 export default {
-  name: "Ranking.vue"
+  name: "Ranking.vue",
+  methods:{
+    log(message){
+      console.log(message)
+    }
+  },
+  data(){
+    const onResolve = (res) => {
+      let rankingData = res.data
+      return{
+        rankingData
+      }
+    }
+    const onError = (err) => {
+      console.log(err)
+    }
+    Ranking.rankingData(onResolve, onError)
+  },
 }
+
 </script>
 
 <style scoped>
