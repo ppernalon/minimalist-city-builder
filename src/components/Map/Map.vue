@@ -8,6 +8,7 @@
 
 <script>
 import mapConstants from "/src/components/Map/MapConstants"
+import MapHttpServices from "../../http/MapHttpServices"
 
 const randomMap = []
 for (let row = 0; row < 32; row++){
@@ -71,7 +72,13 @@ export default {
     }
   },
   mounted() {
-    this.buildMap(randomMap)
+    const onResolve = (res) => {
+      this.buildMap(res.data)
+    }
+    const onError = (err) => {
+      console.log(err)
+    }
+    MapHttpServices.generateMap(onResolve, onError)
   },
   methods: {
     buildMap(generatedMap) {
@@ -81,8 +88,8 @@ export default {
       generatedMap.forEach((row, rowIndex) => {
         row.forEach((col, colIndex) => {
           /* random index [int] for random variant of the color */
-          const minIndexColor = Math.ceil(0)
-          const maxIndexColor = Math.floor(4)
+          const minIndexColor = Math.ceil(1)
+          const maxIndexColor = Math.floor(3)
           const indexColor = Math.floor(Math.random() * (maxIndexColor - minIndexColor +1)) + minIndexColor
 
           /* pick env colors */
