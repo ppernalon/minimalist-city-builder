@@ -8,7 +8,7 @@
 
 <script>
 import mapConstants from "/src/components/Map/MapConstants"
-import MapHttpServices from "../../http/MapHttpServices"
+// import MapHttpServices from "../../http/MapHttpServices"
 
 const pickColorPool = (value) => {
   let envColors
@@ -88,7 +88,7 @@ const computeInfluenceSphere = (col, row, buildingType) => {
 export default {
   name: 'Map',
   props: {
-    map: Array(String),
+    map: Array,
     typeSelected: String,
   },
   data() {
@@ -101,13 +101,14 @@ export default {
     }
   },
   mounted() {
-    const onResolve = (res) => {
-      this.buildMap(res.data)
-    }
-    const onError = (err) => {
-      console.log(err)
-    }
-    MapHttpServices.generateMap(onResolve, onError)
+    this.buildMap(this.map)
+    // const onResolve = (res) => {
+    //   this.buildMap(res.data)
+    // }
+    // const onError = (err) => {
+    //   console.log(err)
+    // }
+    // MapHttpServices.generateMap(onResolve, onError)
   },
   methods: {
     buildMap(generatedMap) {
