@@ -12,7 +12,7 @@
 import ButtonLink from "../components/ButtonLink/ButtonLink";
 import Ranking from "../components/Ranking/Ranking";
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   components: {
     "Ranking" : Ranking,
     "ButtonLink" : ButtonLink

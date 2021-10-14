@@ -1,6 +1,7 @@
 const path = require("path");
 const {BrowserWindow, app} = require("electron");
 
+
 let mainWindow
 
 function createWindow() {
@@ -12,14 +13,14 @@ function createWindow() {
             pathname: path.join(__dirname, `preload.js`),
         }
     })
-
+    mainWindow.maximize()
     mainWindow.loadFile('./dist/index.html')
+    mainWindow.show()
 
     mainWindow.on('closed', function () {
         mainWindow = null
     })
 }
-console.log(app);
 app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {
