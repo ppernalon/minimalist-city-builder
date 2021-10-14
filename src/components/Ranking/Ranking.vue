@@ -9,23 +9,9 @@
         </tr>
       </thead>
       <tbody id="lines">
-        <tr>
-          <td class="contentTable">PP_gangSwag</td>
-          <td class="contentTable">1250</td>
-        </tr>
-        <tr>
-          <td class="contentTable">jujitsu98</td>
-          <td class="contentTable">950</td>
-        </tr>
-        <tr>
-          <td class="contentTable">Xx_RoroDu13_xX</td>
-          <td class="contentTable">13950</td>
-        </tr>
-        {{ log(this.rankingData) }}
-        <tr v-for="(user,index) in users" :key="index">
-          {{ log("gf") }}
-          <td class="contentTable">{{user[0]}}</td>
-          <td class="contentTable">{{user[1]}}</td>
+        <tr v-for="ranking in rankingData" :key="ranking[0]">
+          <td class="contentTable"> {{ ranking[0] }}</td>
+          <td class="contentTable">{{ ranking[1] }}</td>
         </tr>
       </tbody>
     </table>
@@ -42,11 +28,14 @@ export default {
     }
   },
   data(){
+    return {
+      rankingData : []
+    }
+  },
+
+  mounted(){
     const onResolve = (res) => {
-      let rankingData = res.data
-      return{
-        rankingData
-      }
+      this.rankingData = res.data
     }
     const onError = (err) => {
       console.log(err)
