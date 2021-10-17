@@ -30,7 +30,9 @@ export default {
   flex-direction: column;
   width: 80vw;
   align-items: center;
-  margin: 10vh auto 5vh auto;
+  padding-top: 10vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 #rankingContainer{
   margin-top: 4vh;

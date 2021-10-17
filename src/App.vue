@@ -19,5 +19,6 @@ export default {
   color: #008CFF;
   font-family: 'Slackey', sans-serif;
   height: 100vh;
+  overflow: hidden;
 }
 </style>

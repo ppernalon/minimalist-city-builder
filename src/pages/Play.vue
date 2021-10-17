@@ -63,6 +63,7 @@ export default {
 }
 
 .buttons{
+  padding-top: 2vh;
   display: flex;
   margin-right: auto;
   margin-left: auto;
@@ -71,9 +72,12 @@ export default {
 }
 
 #playContainer{
-  width: 80vw;
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute;
+  top: 2vh;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  transform-origin: top;
+  width: 90vw;
 }
 
 </style>

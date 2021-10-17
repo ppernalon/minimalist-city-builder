@@ -27,8 +27,8 @@ export default {
 
 <style scoped>
 .imageBuilding{
-  height: 100px;
-  margin: 15px
+  height: 80px;
+  margin: 10px
 }
 .buildingNumber{
   background: #008CFF;
