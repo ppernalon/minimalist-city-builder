@@ -88,8 +88,8 @@ export default {
       }
       if (col < 0){
         col = 0
-      } else if (col >= mapConstants.NUMBER_TILE_COL - 1){
-        col = mapConstants.NUMBER_TILE_COL - 2
+      } else if (col >= mapConstants.NUMBER_TILE_COL){
+        col = mapConstants.NUMBER_TILE_COL - 1
       }
 
       /* pick canvas to draw on */
@@ -100,7 +100,7 @@ export default {
       hoverContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
 
       /* draw influence */
-      const buildingType = "Harbour" // TODO change with props after
+      const buildingType = "Market" // TODO change with props after
 
       const squaresToFill = this.computeInfluenceSphere(col, row, buildingType)
 
@@ -115,8 +115,7 @@ export default {
       })
 
       const score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
-
-      this.drawScoreOnCanvas(col, row, score, hoverContext)
+      this.drawScoreOnCanvas(col, row, score, buildingType, hoverContext)
 
       /* draw building */
       this.drawBuildingOnCanvas(col, row, buildingType, hoverContext)
@@ -252,13 +251,31 @@ export default {
       )
     },
 
-    drawScoreOnCanvas(col, row, score, context) {
+    drawScoreOnCanvas(col, row, score, buildingType, context) {
       context.font = "14px Slackey"
       context.fillStyle = 'black'
+
+      const buildingSize = this.getSizeBuilding(buildingType)
+      const buildingWidth = buildingSize[1]
+      const buildingHeight = buildingSize[0]
+      const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row, buildingWidth, buildingHeight)
+
+      let colScore = col - 1.5
+      let rowScore = centerBuildingRow + 1
+
+      if (centerBuildingCol < (buildingWidth + 1)) {
+        colScore = centerBuildingCol
+        rowScore = row - 0.5
+      }
+      if (row < (buildingHeight + 1) && centerBuildingCol < (buildingWidth + 1)){
+        colScore = col + buildingWidth + 0.5
+        rowScore = row + buildingHeight + 0.5
+      }
+
       context.fillText(
           score.toString(),
-          (col + 1/2) * mapConstants.TILE_SIZE,
-          (row + 3) * mapConstants.TILE_SIZE
+          colScore * mapConstants.TILE_SIZE,
+          rowScore * mapConstants.TILE_SIZE
       )
     },
 
