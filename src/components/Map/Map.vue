@@ -138,7 +138,7 @@ export default {
         col = mapConstants.NUMBER_TILE_COL - 2
       }
 
-      const buildingType = "Harbour" // TODO change with props after
+      const buildingType = "Market" // TODO change with props after
 
       if (this.canBeBuild(col, row, buildingType, state.buildings)){
         this.setBuilding(col, row, buildingType, state.buildings)
@@ -292,8 +292,9 @@ export default {
 
     computeInfluenceSphere(col, row, buildingType) {
       const buildingSize = this.getSizeBuilding(buildingType)
-
-      const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row,  buildingSize[1], buildingSize[0])
+      const buildingWidth = buildingSize[1]
+      const buildingHeight = buildingSize[0]
+      const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row, buildingWidth, buildingHeight)
 
       const range = mapConstants.INFLUENCE_RANGES[buildingType]
       const squaresToFill = []
@@ -391,14 +392,19 @@ export default {
       const range = mapConstants.INFLUENCE_RANGES[buildingType]
       const buildingsId = []
 
+      const buildingSize = this.getSizeBuilding(buildingType)
+      const buildingWidth = buildingSize[1]
+      const buildingHeight = buildingSize[0]
+      const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row, buildingWidth, buildingHeight)
+
       let score = this.getEnvScore(envBuiltOn, buildingType)
       if (score === 'notAllowed'){
         score = ''
       } else {
         buildingsArray.forEach((buildingsRow, buildingsRowIndex) => {
           buildingsRow.forEach((building, buildingColIndex) => {
-            const dx = Math.abs(row - buildingsRowIndex)
-            const dy = Math.abs(col - buildingColIndex)
+            const dx = Math.abs(centerBuildingRow - buildingsRowIndex)
+            const dy = Math.abs(centerBuildingCol - buildingColIndex)
             const dist = this.computeDist(dx, dy)
             if (dist < range && !buildingsId.includes(building.id) && building.id !== 'none'){
               buildingsId.push(building.id)
