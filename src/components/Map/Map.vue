@@ -1,5 +1,5 @@
 <template>
-  <div id="mapComponent" @mousemove="onMouseMove" @mouseout="onMouseOut">
+  <div id="mapComponent" @mousemove="onMouseMove" @mouseout="onMouseOut" @click="onClick">
     <canvas id="buildingsCanvas" ref="buildingsCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="hoverCanvas" ref="hoverCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="backgroundMap" ref="backgroundMap" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
@@ -8,11 +8,10 @@
 
 <script>
 import mapConstants from "/src/components/Map/MapConstants"
-import {reactive} from "vue";
 
-const state = reactive({
+const state = {
   buildings: []
-})
+}
 
 export default {
   name: 'Map',
@@ -89,8 +88,8 @@ export default {
       }
       if (col < 0){
         col = 0
-      } else if (col >= mapConstants.NUMBER_TILE_COL){
-        col = mapConstants.NUMBER_TILE_COL - 1
+      } else if (col >= mapConstants.NUMBER_TILE_COL - 1){
+        col = mapConstants.NUMBER_TILE_COL - 2
       }
 
       /* pick canvas to draw on */
@@ -101,14 +100,13 @@ export default {
       hoverContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
 
       /* draw influence */
-      const buildingType = "Manor" // TODO change with props after
+      const buildingType = "Harbour" // TODO change with props after
 
       const squaresToFill = this.computeInfluenceSphere(col, row, buildingType)
 
       let influenceColor = mapConstants.INFLUENCE_COLOR
-      const currentEnv = this.getEnvBuilding(col, row, buildingType)
-      const envScore = this.getEnvScore(currentEnv, buildingType)
-      if (envScore === 'notAllowed'){
+      const canBeBuildConst = this.canBeBuild(col, row, buildingType, state.buildings)
+      if (!canBeBuildConst){
         influenceColor = mapConstants.NOT_ALLOWED_COLOR
       }
 
@@ -116,12 +114,91 @@ export default {
         this.drawRectOnCanvas(square[0], square[1], influenceColor, hoverContext)
       })
 
-      const score = this.computeScore(col, row, buildingType, state.buildings)
+      const score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
 
       this.drawScoreOnCanvas(col, row, score, hoverContext)
 
       /* draw building */
       this.drawBuildingOnCanvas(col, row, buildingType, hoverContext)
+    },
+
+    onClick(eventMouseClick) {
+      const rectCanvas = this.$refs["hoverCanvas"].getBoundingClientRect()
+      let row = Math.floor((eventMouseClick.clientY - rectCanvas.top)/mapConstants.TILE_SIZE)
+      let col = Math.floor((eventMouseClick.clientX - rectCanvas.left)/mapConstants.TILE_SIZE)
+
+      /* avoid going outside */
+      if (row < 0){
+        row = 0
+      } else if (row >= mapConstants.NUMBER_TILE_ROW){
+        row = mapConstants.NUMBER_TILE_ROW - 1
+      }
+      if (col < 0){
+        col = 0
+      } else if (col >= mapConstants.NUMBER_TILE_COL - 1){
+        col = mapConstants.NUMBER_TILE_COL - 2
+      }
+
+      const buildingType = "Harbour" // TODO change with props after
+
+      if (this.canBeBuild(col, row, buildingType, state.buildings)){
+        this.setBuilding(col, row, buildingType, state.buildings)
+
+        const buildingCanvas = this.$refs["buildingsCanvas"]
+        const buildingContext = buildingCanvas.getContext('2d')
+        this.drawBuildingOnCanvas(col, row, buildingType, buildingContext)
+      }
+
+    },
+
+    canBeBuild(col, row, buildingType, buildingsArray){
+      const env = this.getEnvBuilding(col, row, buildingType)
+
+      const envScore = this.getEnvScore(env, buildingType)
+      if (envScore === 'notAllowed'){
+        return false
+      } else {
+        const buildingSize = this.getSizeBuilding(buildingType)
+        const buildingWidth = buildingSize[1]
+        const buildingHeight = buildingSize[0]
+        for (let colIndex = 0; colIndex < buildingWidth; colIndex++){
+          for (let rowIndex = 0; rowIndex < buildingHeight; rowIndex++){
+            if (buildingsArray[row + rowIndex][col + colIndex].id !== 'none'){
+              return false
+            }
+          }
+        }
+        return true
+      }
+    },
+
+    computeNextId(buildingsArray){
+      let nextId = 0
+      buildingsArray.forEach(rows => {
+        rows.forEach(building => {
+          if (building.id >= nextId) {
+            nextId = building.id + 1
+          }
+        })
+      })
+      return nextId
+    },
+
+    setBuilding(col, row, buildingType, buildingsArray) {
+      const buildingSize = this.getSizeBuilding(buildingType)
+      const buildingWidth = buildingSize[1]
+      const buildingHeight = buildingSize[0]
+
+      const buildingId = this.computeNextId(buildingsArray)
+
+      for (let colIndex = 0; colIndex < buildingWidth; colIndex++){
+        for (let rowIndex = 0; rowIndex < buildingHeight; rowIndex++){
+          buildingsArray[row + rowIndex][col + colIndex] = {
+            id: buildingId,
+            type: buildingType
+          }
+        }
+      }
     },
 
     pickColorPool(value) {
@@ -197,7 +274,6 @@ export default {
     },
 
     computeInfluenceSphere(col, row, buildingType) {
-
       const buildingSize = this.getSizeBuilding(buildingType)
 
       const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row,  buildingSize[1], buildingSize[0])
@@ -260,8 +336,8 @@ export default {
       const buildingWidth = buildingSize[1]
       const buildingHeight = buildingSize[0]
 
-      for (let colIndex = 0; colIndex < buildingHeight; colIndex++){
-        for (let rowIndex = 0; rowIndex < buildingWidth; rowIndex++){
+      for (let colIndex = 0; colIndex < buildingWidth; colIndex++){
+        for (let rowIndex = 0; rowIndex < buildingHeight; rowIndex++){
           env.push(this.getEnv(col + colIndex, row + rowIndex))
         }
       }
@@ -281,6 +357,13 @@ export default {
       }
       if (env.includes('water')){
         finalEnv = 'water'
+      }
+      if (buildingType === 'Harbour'){
+        env.forEach(e => {
+          if (e !== 'beach'){
+            finalEnv = 'plain' // Harbour are notAllowed outsite beach
+          }
+        })
       }
 
       return finalEnv
