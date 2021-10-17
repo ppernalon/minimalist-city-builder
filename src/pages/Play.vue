@@ -5,22 +5,37 @@
   <div class="LoadingContainer">
     Chargement de la map en cours...
   </div>
-  <Map v-if="this.dataMap.length>=1" v-bind:map='dataMap'/>
+  <div v-if="this.dataMap.length>=1" id="playContainer">
+    <Map v-bind:map='dataMap'/>
+    <div class="buttons">
+      <InGameButton
+          v-for="(nberAvailable,buildingName) in buildings"
+          v-bind:key="buildingName"
+          v-bind:buildingName="buildingName"
+          v-bind:numberAvailable=nberAvailable
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 import Map from "../components/Map/Map";
 import MapHttpServices from "../http/MapHttpServices";
 import Loading from "../components/Loading/Loading"
+import InGameButton from "../components/InGameButton/InGameButton"
+import mapConstants from "../components/Map/MapConstants";
 export default {
   name: "Play.vue",
   components:{
+    "InGameButton" : InGameButton,
     'Loading' : Loading,
     'Map' : Map
   },
   data(){
     return {
-      dataMap : []
+      numberAvailable:[],
+      dataMap : [],
+      buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE
     }
   },
   mounted() {
@@ -36,7 +51,7 @@ export default {
 </script>
 
 <style scoped>
-.LoadingComponent{}
+
 .LoadingContainer{
   transform: scale(1.5) translateY(-50%);
   width: fit-content;
@@ -46,4 +61,19 @@ export default {
   position: relative;
   top:50%;
 }
+
+.buttons{
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  flex-wrap: wrap;
+  width: auto;
+}
+
+#playContainer{
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 </style>

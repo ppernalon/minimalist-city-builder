@@ -77,6 +77,21 @@ const mapConstants = {
         Fields: [4, 2]
     },
 
+    SRC_BUILDINGS_NBER_AVAILABLE:{
+        TownCenter: 0,
+        Manor: 1,
+        House: 2,
+        Market: 0,
+        Theater: 0,
+        Park: 0,
+        Lumberjacks: 0,
+        Mines: 5,
+        Harbour: 2,
+        Tavern: 0,
+        Farm: 1,
+        Fields: 0,
+    },
+
     SRC_BUILDINGS: {
         TownCenter: '/buildings/town-center.png',
         Manor: '/buildings/manor.png',
