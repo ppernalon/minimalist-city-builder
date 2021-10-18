@@ -15,7 +15,6 @@
           v-bind:numberAvailable=nberAvailable
       />
       <ScoreBar v-bind:totalScore="this.totalScore" />
-    <p> {{ this.totalScore}} </p>
     </div>
   </div>
 </template>
