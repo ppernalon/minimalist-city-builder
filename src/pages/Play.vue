@@ -6,7 +6,7 @@
     Chargement de la map en cours...
   </div>
   <div v-if="this.dataMap.length>=1" id="playContainer">
-    <Map v-bind:map='dataMap'/>
+    <Map v-bind:map='dataMap' @changeTotalScore="onChangeTotalScore" />
     <div class="buttons">
       <InGameButton
           v-for="(nberAvailable,buildingName) in buildings"
@@ -14,6 +14,8 @@
           v-bind:buildingName="buildingName"
           v-bind:numberAvailable=nberAvailable
       />
+      <ScoreBar v-bind:totalScore="this.totalScore" />
+    <p> {{ this.totalScore}} </p>
     </div>
   </div>
 </template>
@@ -24,18 +26,28 @@ import MapHttpServices from "../http/MapHttpServices";
 import Loading from "../components/Loading/Loading"
 import InGameButton from "../components/InGameButton/InGameButton"
 import mapConstants from "../components/Map/MapConstants";
+import ScoreBar from "../components/ScoreBar/ScoreBar"
 export default {
   name: "Play.vue",
   components:{
     "InGameButton" : InGameButton,
     'Loading' : Loading,
-    'Map' : Map
+    'Map' : Map,
+    'ScoreBar' : ScoreBar
+  },
+  methods: {  
+   onChangeTotalScore(payload) {
+     console.log(payload)
+     this.totalScore = payload.totalScore;
+
+    }
   },
   data(){
     return {
       numberAvailable:[],
       dataMap : [],
-      buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE
+      buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE,
+      totalScore: 0
     }
   },
   mounted() {

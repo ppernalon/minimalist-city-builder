@@ -17,13 +17,15 @@ export default {
   name: 'Map',
   props: {
     map: Array,
-    typeSelected: String,
+    typeSelected: String, 
   },
-
+  emits: ['changeTotalScore'],
   data() {
     return {
       mapWidth: mapConstants.TILE_SIZE * mapConstants.NUMBER_TILE_COL,
       mapHeight: mapConstants.TILE_SIZE * mapConstants.NUMBER_TILE_ROW,
+      totalScore: 0,
+      score: 0
     }
   },
 
@@ -33,6 +35,7 @@ export default {
   },
 
   methods: {
+
     initBuildings(){
       const startBuildings = []
       for (let rowIndex = 0; rowIndex < mapConstants.NUMBER_TILE_ROW; rowIndex++ ){
@@ -114,8 +117,8 @@ export default {
         this.drawRectOnCanvas(square[0], square[1], influenceColor, hoverContext)
       })
 
-      const score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
-      this.drawScoreOnCanvas(col, row, score, buildingType, hoverContext)
+      this.score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
+      this.drawScoreOnCanvas(col, row, this.score, buildingType, hoverContext)
 
       /* draw building */
       this.drawBuildingOnCanvas(col, row, buildingType, hoverContext)
@@ -142,10 +145,13 @@ export default {
 
       if (this.canBeBuild(col, row, buildingType, state.buildings)){
         this.setBuilding(col, row, buildingType, state.buildings)
-
         const buildingCanvas = this.$refs["buildingsCanvas"]
         const buildingContext = buildingCanvas.getContext('2d')
         this.drawBuildingOnCanvas(col, row, buildingType, buildingContext)
+        
+        //Update totalScore
+        this.totalScore += this.score
+        this.$emit('changeTotalScore', {totalScore : this.totalScore }) 
       }
 
     },
