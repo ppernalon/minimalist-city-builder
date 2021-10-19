@@ -40,7 +40,7 @@ export default {
     const onError = (err) => {
       console.log(err)
     }
-    Ranking.rankingData(onResolve, onError)
+    Ranking.getRankingData(onResolve, onError)
   },
 }
 

@@ -14,6 +14,7 @@
           v-bind:buildingName="buildingName"
           v-bind:numberAvailable=nberAvailable
       />
+      <SurrenderButton v-bind:totalScore="this.totalScore" />
       <ScoreBar v-bind:totalScore="this.totalScore" />
     </div>
   </div>
@@ -26,13 +27,15 @@ import Loading from "../components/Loading/Loading"
 import InGameButton from "../components/InGameButton/InGameButton"
 import mapConstants from "../components/Map/MapConstants";
 import ScoreBar from "../components/ScoreBar/ScoreBar"
+import SurrenderButton from "../components/SurrenderButton/SurrenderButton.vue"
 export default {
   name: "Play.vue",
   components:{
     "InGameButton" : InGameButton,
     'Loading' : Loading,
     'Map' : Map,
-    'ScoreBar' : ScoreBar
+    'ScoreBar' : ScoreBar,
+    'SurrenderButton' : SurrenderButton
   },
   methods: {  
    onChangeTotalScore(payload) {
