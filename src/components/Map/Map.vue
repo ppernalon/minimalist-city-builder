@@ -17,7 +17,7 @@ export default {
   name: 'Map',
   props: {
     map: Array,
-    typeSelected: String, 
+    typeSelected: String,
   },
   emits: ['changeTotalScore'],
   data() {
@@ -103,7 +103,7 @@ export default {
       hoverContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
 
       /* draw influence */
-      const buildingType = "Market" // TODO change with props after
+      const buildingType = this.typeSelected // TODO change with props after
 
       const squaresToFill = this.computeInfluenceSphere(col, row, buildingType)
 
@@ -141,7 +141,7 @@ export default {
         col = mapConstants.NUMBER_TILE_COL - 2
       }
 
-      const buildingType = "Market" // TODO change with props after
+      const buildingType = this.typeSelected // TODO change with props after
 
       if (this.canBeBuild(col, row, buildingType, state.buildings)){
         this.setBuilding(col, row, buildingType, state.buildings)

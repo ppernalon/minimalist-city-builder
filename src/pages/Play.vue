@@ -2,17 +2,18 @@
   <div class="LoadingContainer" v-if="this.dataMap.length<1">
       <Loading/>
   </div>
-  <div class="LoadingContainer">
+  <div class="LoadingContainer" v-if="this.dataMap.length<1">
     Chargement de la map en cours...
   </div>
-  <div v-if="this.dataMap.length>=1" id="playContainer">
-    <Map v-bind:map='dataMap' @changeTotalScore="onChangeTotalScore" />
+  <div  id="playContainer" v-if="this.dataMap.length>=1">
+    <Map v-bind:map='dataMap' @changeTotalScore="onChangeTotalScore" v-bind:typeSelected="buildingType"/>
     <div class="buttons">
       <InGameButton
           v-for="(nberAvailable,buildingName) in buildings"
           v-bind:key="buildingName"
           v-bind:buildingName="buildingName"
           v-bind:numberAvailable=nberAvailable
+          @onChangeButtonClick="onChangeButtonClick"
       />
       <SurrenderButton v-bind:totalScore="this.totalScore" />
       <ScoreBar v-bind:totalScore="this.totalScore" />
@@ -39,9 +40,10 @@ export default {
   },
   methods: {  
    onChangeTotalScore(payload) {
-     console.log(payload)
      this.totalScore = payload.totalScore;
-
+    },
+    onChangeButtonClick(buildingName){
+      this.buildingType = buildingName.buildingName
     }
   },
   data(){
@@ -49,7 +51,8 @@ export default {
       numberAvailable:[],
       dataMap : [],
       buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE,
-      totalScore: 0
+      totalScore: 0,
+      buildingType:""
     }
   },
   mounted() {
