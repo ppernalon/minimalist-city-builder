@@ -1,14 +1,23 @@
 {
   "name": "minimalist-city-builder",
-  "version": "0.1.0",
-  "main": "main.js",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service build && electron .",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "description": "A pixel city builder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppernalon/minimalist-city-builder.git"
+  },
+  "author": "Paul Pernalon, Julie Brunetto, Romain Camisard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ppernalon/minimalist-city-builder/issues"
+  },
+  "homepage": "https://github.com/ppernalon/minimalist-city-builder#readme",
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
@@ -21,7 +30,6 @@
     "@vue/compiler-sfc": "^3.0.0",
     "axios": "^0.22.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^15.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0"
   },
