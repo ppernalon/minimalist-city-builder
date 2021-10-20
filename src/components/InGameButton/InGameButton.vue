@@ -1,10 +1,13 @@
 <template>
-  <button class="containerButton" @click="onClick" >
+  <button class="containerButton"
+          @click="onClick"
+          :disabled='this.numberAvailable<1'
+          :class="[ {'containerButtonSelected': this.isActive[this.buildingName]} ]">
       <img class="imageBuilding"
            :src="getBuildingImageSource(this.buildingName)"
            alt="Building">
       <div class="buildingNumber">
-      <div class="number"> {{this.numberAvailable}} </div>
+        <div class="number"> {{this.numberAvailable}} </div>
   </div>
   </button>
 </template>
@@ -12,25 +15,36 @@
 <script>
 import mapConstants from "../Map/MapConstants";
 
+const isActive = JSON.parse(JSON.stringify(mapConstants.SRC_BUILDINGS))
+
 export default {
   name: "InGameButton.vue",
   props: {
     buildingName: String,
     numberAvailable : Int8Array,
   },
+  data(){
+    for (let building in isActive) {
+      isActive[building]=false
+    }
+    return({
+      buildingSelected: "",
+      isActive
+    })
+  },
   methods:{
-    data(){
-      return({
-        buildingSelected:""
-      })
-    },
     getBuildingImageSource(buildingType){
       return mapConstants.SRC_BUILDINGS[buildingType]
     },
     onClick() {
+      for (let building in this.isActive) {
+        this.isActive[building]=false
+      }
+      if(this.numberAvailable>1){
+        this.isActive[this.buildingName] = !this.isActive[this.buildingName]
+      }
       this.$emit('onChangeButtonClick', {buildingName : this.buildingName })
       this.buildingSelected=this.buildingName
-      console.log(this.buildingSelected)
     }
   },
 }
@@ -38,6 +52,7 @@ export default {
 </script>
 
 <style scoped>
+
 .containerButton{
   color:inherit;
   background-color: inherit;
@@ -58,8 +73,24 @@ export default {
   background-clip: content-box;
   filter: invert(100%);
 }
-
+.containerButton:disabled{
+  cursor: not-allowed;
+}
 .containerButton:hover .buildingNumber{
+  border: #008CFF 3px solid;
+  padding: 2px;
+  background-color: white;
+  color: #008CFF;
+}
+.containerButtonSelected .imageBuilding{
+  border: #ff7300 3px solid;
+  padding: 2px;
+  background-color: #ff7300;
+  background-clip: content-box;
+  filter: invert(100%);
+}
+
+.containerButtonSelected .buildingNumber{
   border: #008CFF 3px solid;
   padding: 2px;
   background-color: white;
