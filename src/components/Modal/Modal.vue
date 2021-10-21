@@ -43,7 +43,7 @@ import RankingHttpServices from '../../http/RankingHttpServices';
         postRankings() {
           const onResolve = () => {
             close()
-            document.location.replace('/')
+            location.pathname = '/'
           }
           const onError = (err) => {
             console.log(err)
