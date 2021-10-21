@@ -15,7 +15,7 @@
           v-bind:numberAvailable=nberAvailable
           @onChangeButtonClick="onChangeButtonClick"
       />
-      <SurrenderButton v-bind:totalScore="this.totalScore" />
+      <SurrenderButton v-bind:totalScore="this.totalScore" v-bind:end-game="this.endGame" />
       <ScoreBar v-bind:totalScore="this.totalScore" />
     </div>
   </div>
@@ -45,10 +45,12 @@ export default {
      if (this.buildings[this.buildingType]<1){
        this.buildingType=""
      }
-    },
-    onChangeButtonClick(buildingName) {
-      this.buildingType = buildingName.buildingName
-    }
+     const sumValues = buildings => Object.values(buildings).reduce((a, b) => a + b);
+     sumValues(this.buildings) === 0 ? this.endGame=true : this.endGame=false
+   },
+  onChangeButtonClick(buildingName) {
+    this.buildingType = buildingName.buildingName
+   }
   },
   data(){
     return {
@@ -57,7 +59,8 @@ export default {
       buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE_ROUND1,
       totalScore: 0,
       buildingType:"",
-      round:1
+      round:1,
+      endGame:false,
     }
   },
   mounted() {

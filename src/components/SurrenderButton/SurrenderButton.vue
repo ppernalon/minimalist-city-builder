@@ -10,7 +10,8 @@ import Modal from "../Modal/Modal.vue";
 export default {
     name: 'App',
     props: {
-        totalScore: Number
+      totalScore: Number,
+      endGame: Boolean
     },
     components: {
       Modal,
@@ -29,6 +30,13 @@ export default {
       closeModal() {
         this.isModalVisible = false;
       }
-    }
+    },
+    watch:{
+      endGame: function (){
+        if (this.endGame===true){
+          this.showModal()
+        }
+      }
+      }
   };
 </script>
