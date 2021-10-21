@@ -54,9 +54,10 @@ export default {
     return {
       numberAvailable:[],
       dataMap : [],
-      buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE,
+      buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE_ROUND1,
       totalScore: 0,
-      buildingType:""
+      buildingType:"",
+      round:1
     }
   },
   mounted() {
@@ -68,6 +69,26 @@ export default {
     }
     MapHttpServices.generateMap(onResolve, onError)
   },
+  watch:{
+    totalScore: function (){
+      if (this.totalScore>=30  && this.totalScore<50){
+        if (this.round<2){
+          for (let building in this.buildings) {
+                this.buildings[building]+=mapConstants.SRC_BUILDINGS_NBER_AVAILABLE_ROUND2[building]
+              }
+          this.round=2
+        }
+      }
+      if (this.score>=150){
+        if (this.round<3){
+          for (let building in this.buildings) {
+            this.buildings[building]+=mapConstants.SRC_BUILDINGS_NBER_AVAILABLE_ROUND3[building]
+          }
+          this.round=3
+        }
+      }
+    }
+  }
 }
 </script>
 

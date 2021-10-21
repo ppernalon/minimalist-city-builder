@@ -78,19 +78,49 @@ const mapConstants = {
         Fields: [4, 2]
     },
 
-    SRC_BUILDINGS_NBER_AVAILABLE:{
-        TownCenter: 0,
-        Manor: 1,
-        House: 2,
-        Market: 0,
+    SRC_BUILDINGS_NBER_AVAILABLE_ROUND1:{
+        TownCenter: 1,
+        Manor: 2,
+        House: 4,
+        Market: 1,
         Theater: 0,
-        Park: 0,
+        Park: 2,
         Lumberjacks: 0,
-        Mines: 5,
-        Harbour: 2,
+        Mines: 0,
+        Harbour: 1,
         Tavern: 0,
-        Farm: 1,
+        Farm: 0,
         Fields: 0,
+    },
+
+    SRC_BUILDINGS_NBER_AVAILABLE_ROUND2:{
+        TownCenter: 0,
+        Manor: 4,
+        House: 3,
+        Market: 0,
+        Theater: 1,
+        Park: 0,
+        Lumberjacks: 1,
+        Mines: 1,
+        Harbour: 1,
+        Tavern: 2,
+        Farm: 2,
+        Fields: 1,
+    },
+
+    SRC_BUILDINGS_NBER_AVAILABLE_ROUND3:{
+        TownCenter: 1,
+        Manor: 4,
+        House: 4,
+        Market: 1,
+        Theater: 1,
+        Park: 3,
+        Lumberjacks: 2,
+        Mines: 2,
+        Harbour: 1,
+        Tavern: 2,
+        Farm: 2,
+        Fields: 2,
     },
 
     SRC_BUILDINGS: {

@@ -9,7 +9,8 @@ export default {
     name: "ScoreBar.vue",
     props: {
     totalScore: Number,
-  }
+    }
+
 }
 </script>
 
