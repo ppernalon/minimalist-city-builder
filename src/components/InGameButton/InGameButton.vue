@@ -2,7 +2,7 @@
   <button class="containerButton"
           @click="onClick"
           :disabled='this.numberAvailable<1'
-          :class="[ {'containerButtonSelected': this.isActive[this.buildingName]} ]">
+          :class="[ {'containerButtonSelected': this.isActive[this.buildingName] && this.numberAvailable>0} ]">
       <img class="imageBuilding"
            :src="getBuildingImageSource(this.buildingName)"
            alt="Building">

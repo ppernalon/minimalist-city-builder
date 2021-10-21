@@ -41,8 +41,12 @@ export default {
   methods: {  
    onChangeTotalScore(payload) {
      this.totalScore = payload.totalScore;
+     this.buildings[this.buildingType]= this.buildings[this.buildingType]-1
+     if (this.buildings[this.buildingType]<1){
+       this.buildingType=""
+     }
     },
-    onChangeButtonClick(buildingName){
+    onChangeButtonClick(buildingName) {
       this.buildingType = buildingName.buildingName
     }
   },
