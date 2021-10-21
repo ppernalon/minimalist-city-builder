@@ -57,7 +57,8 @@ export default {
   color:inherit;
   background-color: inherit;
   border: none;
-  margin: 10px
+  margin: 10px 10px 30px;
+  height:80px
 }
 
 .containerButton:hover{
