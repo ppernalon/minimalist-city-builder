@@ -13,7 +13,7 @@
       <section class="modal-body">
         <slot name="body">
           <div id="username"> Username </div>
-          <input type="text" id="inputUsername" name="Username" @change="updateUsername" v-model="userName">
+          <input type="text" id="inputUsername" name="Username" @keyup="updateUsername" v-model="userName">
         </slot>
        </section>
       <footer class="modal-body">
