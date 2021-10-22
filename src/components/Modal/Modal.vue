@@ -26,45 +26,46 @@
 <script>
 import RankingHttpServices from '../../http/RankingHttpServices';
     import ScoreBar from "../ScoreBar/ScoreBar.vue"
-        export default {
-        name: 'Modal',
-        props: {
-            score: Number,
-            endGame: Boolean
-        },
-        components:{
-            'ScoreBar' : ScoreBar,
-        },
-        mounted(){
-          document.getElementById("btn-valider").disabled=true
-        },
-        methods: {
-        close() {
-            this.$emit('close');
-        },
-        postRankings() {
-          const onResolve = () => {
-            close()
-            location.pathname = '/'
-          }
-          const onError = (err) => {
-            console.log(err)
-          }
-          let username = document.getElementById("inputUsername").value
-          RankingHttpServices.postRankingData(username, this.score, onResolve, onError) 
-        },
+export default {
+  name: 'Modal',
+  props: {
+      score: Number,
+      endGame: Boolean
+  },
+  components:{
+      'ScoreBar' : ScoreBar,
+  },
+  mounted(){
+    document.getElementById("btn-valider").disabled=true
+  },
+  methods: {
+    close() {
+        this.$emit('close');
+    },
 
-        updateUsername() {
-          let userName = document.getElementById("inputUsername").value
-          let btnValider = document.getElementById("btn-valider")
-          if (userName === "") {
-            btnValider.disabled=true;
-          } else {
-            btnValider.disabled=false
-          }
-        }
-        }, 
-    };
+    postRankings() {
+      const onResolve = () => {
+        close()
+        location.pathname = '/'
+      }
+      const onError = (err) => {
+        console.log(err)
+      }
+      let username = document.getElementById("inputUsername").value
+      RankingHttpServices.postRankingData(username, this.score, onResolve, onError)
+    },
+
+    updateUsername() {
+      let userName = document.getElementById("inputUsername").value
+      let btnValider = document.getElementById("btn-valider")
+      if (userName === "") {
+        btnValider.disabled = true;
+      } else {
+        btnValider.disabled = false
+      }
+    }
+  },
+};
 </script>
 
 <style>
@@ -82,24 +83,23 @@ import RankingHttpServices from '../../http/RankingHttpServices';
   }
 
   .modal {
-    height: 40vh;
-    width: 25vw;
+    height: 400px;
+    width: 400px;
     background: #FFFFFF;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 15px rgb(0 0 0 / 50%)
+    box-shadow: 0 0 15px rgb(0 0 0)
   }
-
 
   .modal-header {
     position: relative;
     padding: 5% 0;
-      }
-
+  }
 
   .modal-body {
     position: relative;
+    height: 80px;
     padding: 20px 15px;
     margin-left: auto;
     margin-right: auto;
@@ -112,19 +112,23 @@ import RankingHttpServices from '../../http/RankingHttpServices';
     border: none;
     color: #008CFF;
     font-size: 20px;
-    padding: 0px 10px;
+    padding: 15px 20px;
     cursor: pointer;
     font-weight: bold;
     background: transparent;
   }
- #btn-valider:disabled{
-   background: grey;
-}
+
+  #btn-valider:disabled{
+    background: grey;
+  }
+
   #btn-valider {
-    width: 30vh;
-    height: 5vh;
+    box-sizing: border-box;
+    width: 20vw;
+    height: 60px;
+    padding: 10px;
     color: white;
-    background: #008CCF;
+    background-color: #008CFF;
     font-family: 'Slackey';
     font-size: 2em;
     letter-spacing: 0.15em;
@@ -132,28 +136,32 @@ import RankingHttpServices from '../../http/RankingHttpServices';
     cursor: pointer;
   }
 
- 
-
   input {
-  width: 20vw;
-  height: 5vh;
-  letter-spacing: 0.1em;
-  font-size: 1.5em;
-  color: #008CFF;
-  text-decoration: none;
-  border : solid #008CFF;
-  text-align: left;
-  padding: 1%;
-  float: right;
-}
+    box-sizing: border-box;
+    width: 20vw;
+    height: 70px;
+    margin: 10px 10px 30px;
+    padding: 11px;
+    letter-spacing: 0.1em;
+    font-size: 1.5em;
+    color: #008CFF;
+    text-decoration: none;
+    border : solid #008CFF;
+    text-align: left;
+    float: right;
+  }
 
-#username {
-  font-size: 1em;
-  position: absolute;
-  background: white;
-  top: 10px;
-  left: 20px;
-  padding: 0px 10px;
-}
+  input:focus{
+    outline: none;
+  }
+
+  #username {
+    font-size: 1em;
+    position: absolute;
+    background: white;
+    top: 20px;
+    left: 40px;
+    padding: 0 10px;
+  }
 
 </style>
