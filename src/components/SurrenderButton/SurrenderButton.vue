@@ -1,7 +1,7 @@
 <template>
   <button type="button" id="surrenderButton" @click="showModal"> Terminer la partie </button>
 
-  <Modal v-show="isModalVisible" @close="closeModal" v-bind:score="this.totalScore"/>
+  <Modal v-show="isModalVisible" @close="closeModal" v-bind:score="this.totalScore" v-bind:end-game="this.endGame" />
 </template>
 
 

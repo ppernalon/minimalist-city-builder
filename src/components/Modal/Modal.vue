@@ -7,7 +7,7 @@
 
       <section class="modal-body">
         <slot name="body">
-            <ScoreBar v-bind:totalScore="this.score" />
+            <ScoreBar v-bind:totalScore="this.score" v-bind:endGame="this.endGame" />
         </slot>
       </section>
       <section class="modal-body">
@@ -30,6 +30,7 @@ import RankingHttpServices from '../../http/RankingHttpServices';
         name: 'Modal',
         props: {
             score: Number,
+            endGame: Boolean
         },
         components:{
             'ScoreBar' : ScoreBar,

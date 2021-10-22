@@ -2,7 +2,7 @@
     <div id="ScoreBar">
         Score : {{ totalScore }}
     </div>
-    <div id="scoreChange" :class="[ {'visible': this.isScoreChangeVisible}, {'hidden': !this.isScoreChangeVisible}, {'positive': this.scoreChange >= 0}, {'negative': this.scoreChange < 0} ]">
+    <div id="scoreChange" :class="[ {'visible': this.isScoreChangeVisible}, {'hidden': !this.isScoreChangeVisible || this.endGame}, {'positive': this.scoreChange >= 0}, {'negative': this.scoreChange < 0} ]">
         {{ this.scoreChange }}
     </div>
 </template>
@@ -12,6 +12,7 @@ export default {
     name: "ScoreBar.vue",
     props: {
     totalScore: Number,
+    endGame: Boolean
     },
     data() {
         return{
@@ -21,13 +22,11 @@ export default {
     },
     watch:{ 
         totalScore: function(newVal, oldVal) { 
+            console.log(this.endGame)
             this.scoreChange = newVal - oldVal
-            console.log(this.isScoreChangeVisible)
             this.isScoreChangeVisible = true;
-            console.log(this.isScoreChangeVisible)
             setTimeout( () => {
                 this.isScoreChangeVisible = false
-                console.log(this.isScoreChangeVisible)
             }, 2000)
             },
         }
