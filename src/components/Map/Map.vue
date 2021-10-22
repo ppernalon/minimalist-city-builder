@@ -254,7 +254,7 @@ export default {
       const imageWidth = buildingSize[1] * mapConstants.TILE_SIZE
       const imageHeight = buildingSize[0] * mapConstants.TILE_SIZE
       const imageToDraw = new Image(imageWidth, imageHeight)
-      imageToDraw.src = require(`/src/assets/buildings/${imageSrc}`)
+      imageToDraw.src = `buildings/${imageSrc}`
 
       context.drawImage(
           imageToDraw,
