@@ -1,11 +1,15 @@
 <template>
   <div class="LoadingContainer" v-if="this.dataMap.length<1">
-      <Loading/>
+    <Loading/>
   </div>
+
   <div class="LoadingContainer" v-if="this.dataMap.length<1">
     Chargement de la map en cours...
   </div>
-  <div  id="playContainer" v-if="this.dataMap.length>=1">
+
+  <div id="playContainer"
+       ref="playContainer"
+       v-if="this.dataMap.length>=1">
     <Map v-bind:map='dataMap' @changeTotalScore="onChangeTotalScore" v-bind:typeSelected="buildingType"/>
     <div class="buttons">
       <InGameButton
@@ -15,11 +19,11 @@
           v-bind:numberAvailable=nberAvailable
           @onChangeButtonClick="onChangeButtonClick"
       />
-    </div>
-    <div class="footerContainer">
+
       <SurrenderButton v-bind:totalScore="this.totalScore" v-bind:end-game="this.endGame" />
-      <ScoreBar v-bind:totalScore="this.totalScore" />
+      <ScoreBar v-bind:totalScore="this.totalScore"/>
     </div>
+
   </div>
 </template>
 
@@ -31,6 +35,9 @@ import InGameButton from "../components/InGameButton/InGameButton"
 import mapConstants from "../components/Map/MapConstants";
 import ScoreBar from "../components/ScoreBar/ScoreBar"
 import SurrenderButton from "../components/SurrenderButton/SurrenderButton.vue"
+
+let scaleRatio = window.innerHeight / (mapConstants.NUMBER_TILE_ROW * mapConstants.TILE_SIZE + 300)
+
 export default {
   name: "Play.vue",
   components:{
@@ -41,7 +48,7 @@ export default {
     'SurrenderButton' : SurrenderButton
   },
   methods: {  
-   onChangeTotalScore(payload) {
+    onChangeTotalScore(payload) {
      this.totalScore = payload.totalScore;
      this.buildings[this.buildingType]= this.buildings[this.buildingType]-1
      if (this.buildings[this.buildingType]<1){
@@ -49,10 +56,15 @@ export default {
      }
      const sumValues = buildings => Object.values(buildings).reduce((a, b) => a + b);
      sumValues(this.buildings) === 0 ? this.endGame=true : this.endGame=false
-   },
-  onChangeButtonClick(buildingName) {
-    this.buildingType = buildingName.buildingName
-   }
+    },
+
+    onChangeButtonClick(buildingName) {
+      this.buildingType = buildingName.buildingName
+    },
+
+    getScaleRatio(){
+      return scaleRatio
+    },
   },
   data(){
     return {
@@ -99,43 +111,37 @@ export default {
 
 <style scoped>
 
-.LoadingContainer{
-  transform: scale(1.5) translateY(-50%);
-  width: fit-content;
-  height: 150px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  top:50%;
-}
+  .LoadingContainer{
+    width: fit-content;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-.buttons{
-  padding-top: 2vh;
-  display: flex;
-  margin-right: auto;
-  margin-left: auto;
-  flex-wrap: wrap;
-  width: 952px;
-}
+  .LoadingContainer:nth-child(1){
+    transform: translateY(175%);
+  }
 
-#playContainer{
-  position: absolute;
-  top: 2vh;
-  left: 50%;
-  transform: translateX(-50%) scale(1);
-  transform-origin: top;
-  width: 90vw;
-}
+  .LoadingContainer:nth-child(2){
+    transform: translateY(125%);
+  }
 
-.footerContainer{
-  padding-top: 2vh;
-  display: flex;
-  margin-right: auto;
-  margin-left: auto;
-  flex-wrap: wrap;
-  width: 952px;
-  display: flex; 
-  justify-content: flex-end;
-}
+  .buttons{
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+    flex-wrap: wrap;
+    width: 952px;
+  }
 
+  #playContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    height: 92vh;
+    margin: auto;
+    transition: transform 0.5s;
+    transform-origin: 50% 0;
+  }
 </style>

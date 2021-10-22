@@ -1,5 +1,9 @@
 <template>
-  <div id="mapComponent" @mousemove="onMouseMove" @mouseout="onMouseOut" @click="onClick">
+  <div id="mapComponent"
+       v-bind:style="{height: `${mapHeight}px`, width: `${mapWidth}px`}"
+       @mousemove="onMouseMove"
+       @mouseout="onMouseOut"
+       @click="onClick">
     <canvas id="hoverBuildingsCanvas" ref="hoverBuildingsCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="hoverInfluenceCanvas" ref="hoverInfluenceCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="buildingsCanvas" ref="buildingsCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
@@ -284,7 +288,7 @@ export default {
       const buildingHeight = buildingSize[0]
       const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row, buildingWidth, buildingHeight)
 
-      let colScore = col - 1.5
+      let colScore = col - buildingWidth/2 - 1
       let rowScore = centerBuildingRow + 1
 
       if (centerBuildingCol < (buildingWidth + 1)) {
@@ -448,8 +452,6 @@ export default {
 <style>
 
 #mapComponent{
-  height: 544px;
-  width: 952px;
   overflow: hidden;
   border: 2px solid #008CFF;
   margin: auto;

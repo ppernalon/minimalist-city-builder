@@ -3,9 +3,12 @@
           @click="onClick"
           :disabled='this.numberAvailable<1'
           :class="[ {'containerButtonSelected': this.isActive[this.buildingName] && this.numberAvailable>0} ]">
-    <img class="imageBuilding"
-         :src="`icons/${getBuildingImageSource(this.buildingName)}`"
-         alt="Building">
+    <div class="containerImage">
+      <img class="imageBuilding"
+           :src="`icons/${getBuildingImageSource(this.buildingName)}`"
+           alt="Building">
+    </div>
+
     <div class="buildingNumber">
         <div class="number"> {{this.numberAvailable}} </div>
     </div>
@@ -54,77 +57,87 @@ export default {
 
 <style scoped>
 
-.containerButton{
-  color:inherit;
-  background-color: inherit;
-  border: none;
-  margin: 10px 10px 30px;
-  height:80px
-}
+  .containerButton{
+    color:inherit;
+    background-color: inherit;
+    border: none;
+    margin: 20px 10px 10px 10px;
+    height: 70px;
+  }
 
-.containerButton:hover{
-  cursor: pointer;
-  transform: scale(1.1);
-  transition: transform 330ms ease-in-out;
-}
+  .containerButton:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: transform 330ms ease-in-out;
+  }
 
-.containerButton:hover .imageBuilding{
-  border: #ff7300 3px solid;
-  padding: 2px;
-  background-color: #ff7300;
-  background-clip: content-box;
-  filter: invert(100%);
-}
-.containerButton:disabled{
-  cursor: not-allowed;
-}
-.containerButton:hover .buildingNumber{
-  border: #008CFF 3px solid;
-  padding: 2px;
-  background-color: white;
-  color: #008CFF;
-}
-.containerButtonSelected .imageBuilding{
-  border: #ff7300 3px solid;
-  padding: 2px;
-  background-color: #ff7300;
-  background-clip: content-box;
-  filter: invert(100%);
-}
+  .containerButton:hover .containerImage{
+    border: #008CFF 3px solid;
+    background-color: #008CFF;
+    padding: 2px;
+    background-clip: content-box;
+  }
 
-.containerButtonSelected .buildingNumber{
-  border: #008CFF 3px solid;
-  padding: 2px;
-  background-color: white;
-  color: #008CFF;
-}
+  .containerButton:hover .imageBuilding{
+    background-clip: content-box;
+    filter: brightness(0) invert(1);;
+  }
+  .containerButton:disabled{
+    cursor: not-allowed;
+  }
+  .containerButton:hover .buildingNumber{
+    border: #008CFF 3px solid;
+    padding: 2px;
+    background-color: white;
+    color: #008CFF;
+  }
+  .containerButtonSelected .imageBuilding{
+    background-clip: content-box;
+    filter: brightness(0) invert(1);;
+  }
 
-.imageBuilding{
-  height: 80px;
-  background-color: white;
-  background-clip: content-box;
-  padding: 2px;
-  border: #008CFF 3px solid;
-}
-.buildingNumber{
-  border: #008CFF 3px solid;
-  background: #008CFF;
-  border-radius: 50%;
-  color: white;
-  width: 30px;
-  height: 30px;
-  position: relative;
-  left: 62px;
-  top: -102px;
-}
+  .containerButtonSelected .containerImage{
+    border: #008CFF 3px solid;
+    background-color: #008CFF;
+    padding: 2px;
+    background-clip: content-box;
+  }
 
-.number{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  width: fit-content;
-  font-family: 'Slackey', cursive;
-  font-size: 1.3em;
-}
+  .containerButtonSelected .buildingNumber{
+    border: #008CFF 3px solid;
+    padding: 2px;
+    background-color: white;
+    color: #008CFF;
+  }
+
+  .containerImage{
+    padding: 2px;
+    border: #008CFF 3px solid;
+  }
+
+  .imageBuilding{
+    height: 60px;
+  }
+
+  .buildingNumber{
+    border: #008CFF 3px solid;
+    background: #008CFF;
+    border-radius: 50%;
+    color: white;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    left: 62px;
+    top: -102px;
+  }
+
+  .number{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: fit-content;
+    font-family: 'Slackey', cursive;
+    font-size: 1.3em;
+  }
 </style>

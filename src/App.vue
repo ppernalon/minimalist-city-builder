@@ -13,12 +13,11 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Slackey&display=swap');
-#container{
-  color: #008CFF;
-  font-family: 'Slackey', sans-serif;
-  height: 100vh;
-  overflow: hidden;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Slackey&display=swap');
+
+  #container{
+    color: #008CFF;
+    font-family: 'Slackey', sans-serif;
+  }
 </style>
