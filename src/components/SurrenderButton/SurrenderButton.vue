@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="btn" @click="showModal"> Terminer la partie </button>
+  <button type="button" id="surrenderButton" @click="showModal"> Terminer la partie </button>
 
   <Modal v-show="isModalVisible" @close="closeModal" v-bind:score="this.totalScore"/>
 </template>
@@ -24,7 +24,6 @@ export default {
     },
     methods: {
       showModal() {
-        console.log(this.totalScore)
         this.isModalVisible = true;
       },
       closeModal() {
@@ -40,3 +39,9 @@ export default {
       }
   };
 </script>
+
+<style scoped>
+  #surrenderButton{
+    margin-right: 15px;
+  }
+</style>

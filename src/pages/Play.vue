@@ -15,6 +15,8 @@
           v-bind:numberAvailable=nberAvailable
           @onChangeButtonClick="onChangeButtonClick"
       />
+    </div>
+    <div class="footerContainer">
       <SurrenderButton v-bind:totalScore="this.totalScore" v-bind:end-game="this.endGame" />
       <ScoreBar v-bind:totalScore="this.totalScore" />
     </div>
@@ -113,7 +115,7 @@ export default {
   margin-right: auto;
   margin-left: auto;
   flex-wrap: wrap;
-  width: auto;
+  width: 952px;
 }
 
 #playContainer{
@@ -123,6 +125,17 @@ export default {
   transform: translateX(-50%) scale(1);
   transform-origin: top;
   width: 90vw;
+}
+
+.footerContainer{
+  padding-top: 2vh;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+  flex-wrap: wrap;
+  width: 952px;
+  display: flex; 
+  justify-content: flex-end;
 }
 
 </style>

@@ -56,7 +56,6 @@ import RankingHttpServices from '../../http/RankingHttpServices';
         updateUsername() {
           let userName = document.getElementById("inputUsername").value
           let btnValider = document.getElementById("btn-valider")
-          console
           if (userName === "") {
             btnValider.disabled=true;
           } else {
