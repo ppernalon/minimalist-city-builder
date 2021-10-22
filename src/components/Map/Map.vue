@@ -1,7 +1,8 @@
 <template>
   <div id="mapComponent" @mousemove="onMouseMove" @mouseout="onMouseOut" @click="onClick">
+    <canvas id="hoverBuildingsCanvas" ref="hoverBuildingsCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
+    <canvas id="hoverInfluenceCanvas" ref="hoverInfluenceCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="buildingsCanvas" ref="buildingsCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
-    <canvas id="hoverCanvas" ref="hoverCanvas" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
     <canvas id="backgroundMap" ref="backgroundMap" v-bind:height="mapHeight" v-bind:width="mapWidth"/>
   </div>
 </template>
@@ -35,7 +36,6 @@ export default {
   },
 
   methods: {
-
     initBuildings(){
       const startBuildings = []
       for (let rowIndex = 0; rowIndex < mapConstants.NUMBER_TILE_ROW; rowIndex++ ){
@@ -72,88 +72,106 @@ export default {
 
     onMouseOut() {
       /* reset hover canvas */
-      const canvas = this.$refs["hoverCanvas"]
-      const context2D = canvas.getContext("2d")
-      context2D.clearRect(0, 0, this.mapWidth, this.mapHeight)
+      const hoverInfluenceCanvas = this.$refs["hoverInfluenceCanvas"]
+      const hoverBuildingsCanvas = this.$refs["hoverBuildingsCanvas"]
+      const hoverInfluenceContext = hoverInfluenceCanvas.getContext("2d")
+      const hoverBuildingsContext = hoverBuildingsCanvas.getContext("2d")
+      hoverInfluenceContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
+      hoverBuildingsContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
     },
 
     onMouseMove(eventMouseMove) {
-      /* compute row and col numbers */
-      const rectCanvas = this.$refs["hoverCanvas"].getBoundingClientRect()
-      let row = Math.floor((eventMouseMove.clientY - rectCanvas.top)/mapConstants.TILE_SIZE)
-      let col = Math.floor((eventMouseMove.clientX - rectCanvas.left)/mapConstants.TILE_SIZE)
+      this.clearHoverCanvas()
+      if (this.typeSelected !== "None") {
+        /* compute row and col numbers */
+        const rectCanvas = this.$refs["hoverInfluenceCanvas"].getBoundingClientRect()
+        let row = Math.floor((eventMouseMove.clientY - rectCanvas.top)/mapConstants.TILE_SIZE)
+        let col = Math.floor((eventMouseMove.clientX - rectCanvas.left)/mapConstants.TILE_SIZE)
 
-      /* avoid going outside */
-      if (row < 0){
-        row = 0
-      } else if (row >= mapConstants.NUMBER_TILE_ROW){
-         row = mapConstants.NUMBER_TILE_ROW - 1
+        /* avoid going outside */
+        if (row < 0){
+          row = 0
+        } else if (row >= mapConstants.NUMBER_TILE_ROW){
+          row = mapConstants.NUMBER_TILE_ROW - 1
+        }
+        if (col < 0){
+          col = 0
+        } else if (col >= mapConstants.NUMBER_TILE_COL){
+          col = mapConstants.NUMBER_TILE_COL - 1
+        }
+
+        /* pick canvas to draw on */
+        const hoverInfluenceCanvas = this.$refs["hoverInfluenceCanvas"]
+        const hoverInfluenceContext = hoverInfluenceCanvas.getContext("2d")
+        const hoverBuildingsCanvas = this.$refs["hoverBuildingsCanvas"]
+        const hoverBuildingsContext = hoverBuildingsCanvas.getContext("2d")
+
+        /* draw influence */
+        const buildingType = this.typeSelected
+
+        const squaresToFill = this.computeInfluenceSphere(col, row, buildingType)
+
+        let influenceColor = mapConstants.INFLUENCE_COLOR
+        const canBeBuildConst = this.canBeBuild(col, row, buildingType, state.buildings)
+        if (!canBeBuildConst){
+          influenceColor = mapConstants.NOT_ALLOWED_COLOR
+        }
+
+        squaresToFill.forEach((square) => {
+          this.drawRectOnCanvas(square[0], square[1], influenceColor, hoverInfluenceContext)
+        })
+
+        this.score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
+        this.drawScoreOnCanvas(col, row, this.score, buildingType, hoverBuildingsContext)
+
+        /* draw building */
+        this.drawBuildingOnCanvas(col, row, buildingType, hoverBuildingsContext)
       }
-      if (col < 0){
-        col = 0
-      } else if (col >= mapConstants.NUMBER_TILE_COL){
-        col = mapConstants.NUMBER_TILE_COL - 1
-      }
-
-      /* pick canvas to draw on */
-      const hoverCanvas = this.$refs["hoverCanvas"]
-      const hoverContext = hoverCanvas.getContext("2d")
-
-      /* reset canvas then draw */
-      hoverContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
-
-      /* draw influence */
-      const buildingType = this.typeSelected // TODO change with props after
-
-      const squaresToFill = this.computeInfluenceSphere(col, row, buildingType)
-
-      let influenceColor = mapConstants.INFLUENCE_COLOR
-      const canBeBuildConst = this.canBeBuild(col, row, buildingType, state.buildings)
-      if (!canBeBuildConst){
-        influenceColor = mapConstants.NOT_ALLOWED_COLOR
-      }
-
-      squaresToFill.forEach((square) => {
-        this.drawRectOnCanvas(square[0], square[1], influenceColor, hoverContext)
-      })
-
-      this.score = canBeBuildConst ? this.computeScore(col, row, buildingType, state.buildings) : ''
-      this.drawScoreOnCanvas(col, row, this.score, buildingType, hoverContext)
-
-      /* draw building */
-      this.drawBuildingOnCanvas(col, row, buildingType, hoverContext)
     },
 
     onClick(eventMouseClick) {
-      const rectCanvas = this.$refs["hoverCanvas"].getBoundingClientRect()
-      let row = Math.floor((eventMouseClick.clientY - rectCanvas.top)/mapConstants.TILE_SIZE)
-      let col = Math.floor((eventMouseClick.clientX - rectCanvas.left)/mapConstants.TILE_SIZE)
+      if (this.typeSelected !== "None") {
+        const rectCanvas = this.$refs["hoverBuildingsCanvas"].getBoundingClientRect()
+        let row = Math.floor((eventMouseClick.clientY - rectCanvas.top) / mapConstants.TILE_SIZE)
+        let col = Math.floor((eventMouseClick.clientX - rectCanvas.left) / mapConstants.TILE_SIZE)
 
-      /* avoid going outside */
-      if (row < 0){
-        row = 0
-      } else if (row >= mapConstants.NUMBER_TILE_ROW){
-        row = mapConstants.NUMBER_TILE_ROW - 1
+        /* avoid going outside */
+        if (row < 0) {
+          row = 0
+        } else if (row >= mapConstants.NUMBER_TILE_ROW) {
+          row = mapConstants.NUMBER_TILE_ROW - 1
+        }
+        if (col < 0) {
+          col = 0
+        } else if (col >= mapConstants.NUMBER_TILE_COL - 1) {
+          col = mapConstants.NUMBER_TILE_COL - 2
+        }
+
+        const buildingType = this.typeSelected
+
+        if (this.canBeBuild(col, row, buildingType, state.buildings)) {
+          this.setBuilding(col, row, buildingType, state.buildings)
+          const buildingCanvas = this.$refs["buildingsCanvas"]
+          const buildingContext = buildingCanvas.getContext('2d')
+          this.drawBuildingOnCanvas(col, row, buildingType, buildingContext)
+
+          //Update totalScore
+          this.totalScore += this.score
+          this.$emit('changeTotalScore', {totalScore: this.totalScore})
+        }
       }
-      if (col < 0){
-        col = 0
-      } else if (col >= mapConstants.NUMBER_TILE_COL - 1){
-        col = mapConstants.NUMBER_TILE_COL - 2
-      }
+    },
 
-      const buildingType = this.typeSelected // TODO change with props after
+    clearHoverCanvas() {
+      /* pick canvas to draw on */
+      const hoverInfluenceCanvas = this.$refs["hoverInfluenceCanvas"]
+      const hoverInfluenceContext = hoverInfluenceCanvas.getContext("2d")
+      const hoverBuildingsCanvas = this.$refs["hoverBuildingsCanvas"]
+      const hoverBuildingsContext = hoverBuildingsCanvas.getContext("2d")
 
-      if (this.canBeBuild(col, row, buildingType, state.buildings)){
-        this.setBuilding(col, row, buildingType, state.buildings)
-        const buildingCanvas = this.$refs["buildingsCanvas"]
-        const buildingContext = buildingCanvas.getContext('2d')
-        this.drawBuildingOnCanvas(col, row, buildingType, buildingContext)
-        
-        //Update totalScore
-        this.totalScore += this.score
-        this.$emit('changeTotalScore', {totalScore : this.totalScore }) 
-      }
-
+      /* reset canvas then draw */
+      hoverInfluenceContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
+      hoverBuildingsContext.clearRect(0, 0, this.mapWidth, this.mapHeight)
     },
 
     canBeBuild(col, row, buildingType, buildingsArray){
@@ -236,7 +254,7 @@ export default {
       const imageWidth = buildingSize[1] * mapConstants.TILE_SIZE
       const imageHeight = buildingSize[0] * mapConstants.TILE_SIZE
       const imageToDraw = new Image(imageWidth, imageHeight)
-      imageToDraw.src = imageSrc
+      imageToDraw.src = require(`/src/assets/buildings/${imageSrc}`)
 
       context.drawImage(
           imageToDraw,
@@ -258,7 +276,7 @@ export default {
     },
 
     drawScoreOnCanvas(col, row, score, buildingType, context) {
-      context.font = "14px Slackey"
+      context.font = "20px Slackey"
       context.fillStyle = 'black'
 
       const buildingSize = this.getSizeBuilding(buildingType)
@@ -449,13 +467,17 @@ export default {
   z-index: 0;
 }
 
-#hoverCanvas{
-  z-index: 1;
-  opacity: 0.8;
+#hoverInfluenceCanvas{
+  z-index: 2;
+  opacity: 0.6;
+}
+
+#hoverBuildingsCanvas{
+  z-index: 3;
 }
 
 #buildingsCanvas{
-  z-index: 2;
+  z-index: 1;
 }
 
 </style>

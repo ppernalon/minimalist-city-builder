@@ -4,7 +4,7 @@
           :disabled='this.numberAvailable<1'
           :class="[ {'containerButtonSelected': this.isActive[this.buildingName] && this.numberAvailable>0} ]">
       <img class="imageBuilding"
-           :src="getBuildingImageSource(this.buildingName)"
+           :src="require(`/src/assets/icons/${getBuildingImageSource(this.buildingName)}`)"
            alt="Building">
       <div class="buildingNumber">
         <div class="number"> {{this.numberAvailable}} </div>
@@ -33,7 +33,7 @@ export default {
     })
   },
   methods:{
-    getBuildingImageSource(buildingType){
+    getBuildingImageSource(buildingType) {
       return mapConstants.SRC_BUILDINGS[buildingType]
     },
     onClick() {

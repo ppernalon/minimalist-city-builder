@@ -45,7 +45,7 @@ export default {
      this.totalScore = payload.totalScore;
      this.buildings[this.buildingType]= this.buildings[this.buildingType]-1
      if (this.buildings[this.buildingType]<1){
-       this.buildingType=""
+       this.buildingType = "None"
      }
      const sumValues = buildings => Object.values(buildings).reduce((a, b) => a + b);
      sumValues(this.buildings) === 0 ? this.endGame=true : this.endGame=false
@@ -60,7 +60,7 @@ export default {
       dataMap : [],
       buildings : mapConstants.SRC_BUILDINGS_NBER_AVAILABLE_ROUND1,
       totalScore: 0,
-      buildingType:"",
+      buildingType: "None",
       round:1,
       endGame:false,
     }
