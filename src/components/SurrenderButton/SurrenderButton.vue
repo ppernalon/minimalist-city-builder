@@ -1,8 +1,10 @@
 <template>
   <button type="button" class="containerButton" @click="showModal">
-    <img class="surrenderButton"
-         :src="`icons/surrender.png`"
-         alt="Building">
+    <div class="containerImage">
+      <img class="surrenderButton"
+           :src="`icons/surrender.png`"
+           alt="Building">
+    </div>
   </button>
 
   <Modal v-show="isModalVisible" @close="closeModal" v-bind:score="this.totalScore" v-bind:end-game="this.endGame" />
@@ -49,7 +51,7 @@ export default {
     color:inherit;
     background-color: inherit;
     border: none;
-    margin: 10px 10px 30px;
+    margin: 30px 10px 10px 10px;
     height: 70px
   }
 
@@ -59,30 +61,28 @@ export default {
     transition: transform 330ms ease-in-out;
   }
 
-  .containerButton:hover .surrenderButton{
-    border: #ff7300 3px solid;
+  .containerButton:hover .containerImage{
+    border: #008CFF 3px solid;
+    background-color: #008CFF;
     padding: 2px;
-    background-color: #ff7300;
     background-clip: content-box;
-    filter: invert(100%);
   }
+
+  .containerButton:hover .surrenderButton{
+    background-clip: content-box;
+    filter: brightness(0) invert(1);
+  }
+
   .containerButton:disabled{
     cursor: not-allowed;
   }
 
-  .containerButtonSelected .surrenderButton{
-    border: #ff7300 3px solid;
+  .containerImage{
     padding: 2px;
-    background-color: #ff7300;
-    background-clip: content-box;
-    filter: invert(100%);
+    border: #008CFF 3px solid;
   }
 
   .surrenderButton{
     height: 60px;
-    background-color: white;
-    background-clip: content-box;
-    padding: 2px;
-    border: #008CFF 3px solid;
   }
 </style>

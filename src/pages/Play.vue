@@ -135,6 +135,10 @@ export default {
   }
 
   #playContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 95vh;
     margin: auto;
     transition: transform 0.5s;
     transform-origin: 50% 0;
