@@ -284,7 +284,7 @@ export default {
       const buildingHeight = buildingSize[0]
       const [centerBuildingCol, centerBuildingRow] = this.computeBuildingCenter(col, row, buildingWidth, buildingHeight)
 
-      let colScore = col - 1.5
+      let colScore = col - buildingWidth/2 - 1
       let rowScore = centerBuildingRow + 1
 
       if (centerBuildingCol < (buildingWidth + 1)) {

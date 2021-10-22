@@ -36,7 +36,10 @@ export default {
 
 <style scoped>
 #ScoreBar{
+  box-sizing: border-box;
   width: 20vw;
+  height: 70px;
+  margin: 10px 10px 30px;
   letter-spacing: 0.15em;
   font-size: 2em;
   color: #008CFF;

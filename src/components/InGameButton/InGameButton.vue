@@ -62,7 +62,7 @@ export default {
   background-color: inherit;
   border: none;
   margin: 10px 10px 30px;
-  height:80px
+  height: 70px;
 }
 
 .containerButton:hover{
@@ -117,7 +117,7 @@ export default {
 }
 
 .imageBuilding{
-  height: 80px;
+  height: 60px;
 }
 .buildingNumber{
   border: #008CFF 3px solid;
