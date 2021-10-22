@@ -385,7 +385,7 @@ export default {
       if (buildingType === 'Harbour'){
         env.forEach(e => {
           if (e !== 'beach'){
-            finalEnv = 'plain' // Harbour are notAllowed outsite beach
+            finalEnv = 'plain' // Harbour are notAllowed outside beach
           }
         })
       }
