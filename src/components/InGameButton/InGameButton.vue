@@ -40,7 +40,7 @@ export default {
       for (let building in this.isActive) {
         this.isActive[building]=false
       }
-      if(this.numberAvailable>1){
+      if(this.numberAvailable>=1){
         this.isActive[this.buildingName] = !this.isActive[this.buildingName]
       }
       this.$emit('onChangeButtonClick', {buildingName : this.buildingName })
