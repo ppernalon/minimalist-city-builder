@@ -3,12 +3,12 @@
           @click="onClick"
           :disabled='this.numberAvailable<1'
           :class="[ {'containerButtonSelected': this.isActive[this.buildingName] && this.numberAvailable>0} ]">
-      <img class="imageBuilding"
-           :src="require(`/src/assets/icons/${getBuildingImageSource(this.buildingName)}`)"
-           alt="Building">
-      <div class="buildingNumber">
+    <img class="imageBuilding"
+         :src="`icons/${getBuildingImageSource(this.buildingName)}`"
+         alt="Building">
+    <div class="buildingNumber">
         <div class="number"> {{this.numberAvailable}} </div>
-  </div>
+    </div>
   </button>
 </template>
 
@@ -36,6 +36,7 @@ export default {
     getBuildingImageSource(buildingType) {
       return mapConstants.SRC_BUILDINGS[buildingType]
     },
+
     onClick() {
       for (let building in this.isActive) {
         this.isActive[building]=false
