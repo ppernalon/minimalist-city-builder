@@ -1,5 +1,5 @@
 const mapConstants = {
-    TILE_SIZE: 17,
+    TILE_SIZE: 13,
     NUMBER_TILE_COL: 56,
     NUMBER_TILE_ROW: 32,
 
