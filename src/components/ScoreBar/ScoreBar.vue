@@ -22,7 +22,6 @@ export default {
     },
     watch:{ 
         totalScore: function(newVal, oldVal) { 
-            console.log(this.endGame)
             this.scoreChange = newVal - oldVal
             this.isScoreChangeVisible = true;
             setTimeout( () => {
