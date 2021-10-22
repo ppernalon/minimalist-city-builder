@@ -121,12 +121,12 @@ export default {
   .LoadingContainer:nth-child(1){
     transform: translateY(175%);
   }
+
   .LoadingContainer:nth-child(2){
     transform: translateY(125%);
   }
 
   .buttons{
-    padding-top: 30px;
     display: flex;
     margin-right: auto;
     margin-left: auto;
@@ -138,7 +138,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 95vh;
+    box-sizing: border-box;
+    height: 92vh;
     margin: auto;
     transition: transform 0.5s;
     transform-origin: 50% 0;

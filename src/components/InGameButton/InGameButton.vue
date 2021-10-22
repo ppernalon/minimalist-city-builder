@@ -61,7 +61,7 @@ export default {
     color:inherit;
     background-color: inherit;
     border: none;
-    margin: 30px 10px 10px 10px;
+    margin: 20px 10px 10px 10px;
     height: 70px;
   }
 
