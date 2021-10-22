@@ -3,9 +3,12 @@
           @click="onClick"
           :disabled='this.numberAvailable<1'
           :class="[ {'containerButtonSelected': this.isActive[this.buildingName] && this.numberAvailable>0} ]">
-    <img class="imageBuilding"
-         :src="`icons/${getBuildingImageSource(this.buildingName)}`"
-         alt="Building">
+    <div class="containerImage">
+      <img class="imageBuilding"
+           :src="`icons/${getBuildingImageSource(this.buildingName)}`"
+           alt="Building">
+    </div>
+
     <div class="buildingNumber">
         <div class="number"> {{this.numberAvailable}} </div>
     </div>
@@ -68,12 +71,17 @@ export default {
   transition: transform 330ms ease-in-out;
 }
 
-.containerButton:hover .imageBuilding{
-  border: #ff7300 3px solid;
+.containerButton:hover .containerImage{
+  border: #008CFF 3px solid;
+  background-color: #008CFF;
   padding: 2px;
-  background-color: #ff7300;
   background-clip: content-box;
-  filter: invert(100%);
+}
+
+
+.containerButton:hover .imageBuilding{
+  background-clip: content-box;
+  filter: brightness(0) invert(1);;
 }
 .containerButton:disabled{
   cursor: not-allowed;
@@ -85,11 +93,15 @@ export default {
   color: #008CFF;
 }
 .containerButtonSelected .imageBuilding{
-  border: #ff7300 3px solid;
-  padding: 2px;
-  background-color: #ff7300;
   background-clip: content-box;
-  filter: invert(100%);
+  filter: brightness(0) invert(1);;
+}
+
+.containerButtonSelected .containerImage{
+  border: #008CFF 3px solid;
+  background-color: #008CFF;
+  padding: 2px;
+  background-clip: content-box;
 }
 
 .containerButtonSelected .buildingNumber{
@@ -99,12 +111,13 @@ export default {
   color: #008CFF;
 }
 
-.imageBuilding{
-  height: 80px;
-  background-color: white;
-  background-clip: content-box;
+.containerImage{
   padding: 2px;
   border: #008CFF 3px solid;
+}
+
+.imageBuilding{
+  height: 80px;
 }
 .buildingNumber{
   border: #008CFF 3px solid;

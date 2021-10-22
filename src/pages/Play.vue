@@ -18,7 +18,7 @@
     </div>
     <div class="footerContainer">
       <SurrenderButton v-bind:totalScore="this.totalScore" v-bind:end-game="this.endGame" />
-      <ScoreBar v-bind:totalScore="this.totalScore" />
+      <ScoreBar v-bind:totalScore="this.totalScore"/>
     </div>
   </div>
 </template>
