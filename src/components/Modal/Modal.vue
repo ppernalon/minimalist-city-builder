@@ -43,9 +43,11 @@ export default {
         this.$emit('close');
     },
 
-    postRankings() {
+    postRankings(submitEvent) {
+      submitEvent.preventDefault() // to avoid closing
+
       const onResolve = () => {
-        close()
+        this.close()
         location.pathname = '/'
       }
       const onError = (err) => {
@@ -84,7 +86,7 @@ export default {
 
   .modal {
     height: 400px;
-    width: 400px;
+    width: fit-content;
     background: #FFFFFF;
     overflow-x: auto;
     display: flex;
